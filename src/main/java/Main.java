@@ -12,22 +12,17 @@ public class Main {
         Extractor extractor = new Extractor();
 
         String pdf;
-        
+
         //Hier Pfade für die jeweiligen PDFs angeben
+
 
 //        pdf = pdfReader.pdfToString("/Users/fabiankaupmann/Downloads/Lebenslauf - Meierhoff, Franziska.pdf");
 //        pdf = pdfReader.pdfToString("/Users/fabiankaupmann/Downloads/Lebenslauf - M_Barek, Elyas.pdf");
-       pdf = pdfReader.pdfToString("/Users/fabiankaupmann/Downloads/Lebenslauf - Popolski, Pawel.pdf");
-//        pdf = pdfReader.pdfToString("/Users/fabiankaupmann/Downloads/Anschreiben_1_150419_164540.pdf");
+//       pdf = pdfReader.pdfToString("/Users/fabiankaupmann/Downloads/Lebenslauf - Popolski, Pawel.pdf");
+        pdf = pdfReader.pdfToString("/Users/fabiankaupmann/Downloads/Anschreiben_1_150419_164540.pdf");
 
 
-        System.out.println(pdf);
-
-
-
-        String pdfGetaggt = extractor.addPostags(pdf);
-
-        System.out.println(pdfGetaggt);
+        extractor.extractData(extractor.splitInLines(pdf));
 
     }
 

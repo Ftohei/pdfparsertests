@@ -11,139 +11,127 @@ import java.util.regex.Pattern;
  */
 public class Extractor {
 
-    private HashSet<String> keywords;
+
+    private boolean nextCity = false;
 
     public Extractor() {
-        this.keywords = new HashSet<String>();
-        this.keywords.add("Name:");
-        this.keywords.add("Vorname:");
-        this.keywords.add("Geburtsdatum:");
-
     }
 
-    public boolean regexMatchMail (String word){
+    public void extractData(ArrayList<String[]> lines){
 
-        Pattern mailAddress = Pattern.compile("([A-Za-z0-9+\\-.,!@#$%^&*()\\\\/|<>\"'_])+\\@([a-z])+(\\.([a-z])+\\.([a-z])+|\\.([a-z])+)");
+        for(String[] line : lines){
 
-        Matcher mailMatcher = mailAddress.matcher(word);
+            for(String word : line){
 
-        if(mailMatcher.find()){
-            return true;
+                //extraktionsmethoden prüfen das wort, speichern bei Match in das Data-Objekt
+
+
+                if(this.checkForMail(word)){
+                    System.out.println("Email: " + word);
+                }
+
+                if(this.checkForCity(word)){
+                    System.out.println("Stadt: " + word);
+                }
+
+                if(this.checkForPostalCode(word)){
+                    System.out.println("Postleitzahl: " + word);
+                }
+
+                if(this.checkForPhoneNumber(word)){
+                    System.out.println("Telefonnummer: " + word);
+                }
+
+            }
+
         }
 
-        return false;
     }
 
+    public ArrayList<String[]> splitInLines(String string){
+        ArrayList<String[]> lines = new ArrayList<String[]>();
 
-    public boolean regexMatchPhonenumber ( String word){
-        Pattern phoneNumber = Pattern.compile("([0-9]){4,}\\s*\\/\\s*([0-9])+");
+        Scanner scanner = new Scanner(string);
+        scanner.useDelimiter("\n");
 
-        Matcher phoneNumberMatcher = phoneNumber.matcher(word);
-
-        if(phoneNumberMatcher.find()){
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean regexMatchPostalCode (String word){
-        Pattern postalCodeAndCity =  Pattern.compile("([0-9]){5}");
-
-        Matcher postalMatcher = postalCodeAndCity.matcher(word);
-
-        if(postalMatcher.find()){
-            return true;
-        }
-
-        return false;
-    }
-
-    public void analyzeWithScanner(String lebenslauf){
-        Scanner scanner = new Scanner(lebenslauf);
-        scanner.useDelimiter("\\s+");
-
-        boolean nextImportant = false;
         while(scanner.hasNext()){
-            String word = scanner.next();
+            String line = scanner.next();
 
-            if(nextImportant){
-                System.out.println("Durch keyword entdeckt: " + word);
-            }
+            String[] lineArray = line.split("\\s+");
 
-            if(this.regexMatchMail(word)){
-                System.out.println("Mail:" + word);
-            }
-
-            if(this.regexMatchPhonenumber(word)){
-                System.out.println("Telefonnummer: " + word);
-            };
-
-            if(this.regexMatchPostalCode(word)){
-                System.out.println("Postleitzahl: " + word);
-            }
-
-            nextImportant = this.matchKeywords(word);
-
+            lines.add(lineArray);
         }
 
+        return lines;
     }
 
-    public boolean matchKeywords (String word){
 
-        String pattern = "";
-
-        for(String keyword : this.keywords){
-            pattern = pattern + keyword + "|";
-        }
+    public boolean checkForStreetAdress(String word){
 
 
-//        System.out.println(pattern);
 
-        Pattern keywordPattern =  Pattern.compile("pattern");
 
-        Matcher keywordMatcher = keywordPattern.matcher(word);
+        return false;
+    }
 
-        if(keywordMatcher.find()){
+
+    public boolean checkForCity(String word){
+
+        String cityRegex = "([A-Za-zäöü])+";
+
+        if(word.matches(cityRegex) && this.nextCity){
+
+            this.nextCity = false;
             return true;
-        } else {
-            return false;
+
         }
+
+        return false;
     }
 
+    public boolean checkForPostalCode(String word){
+
+        //TODO: nächstes Wort ist immer Stadt. Falls nicht, dann verwerfen
+
+        String postalCodeRegex = "([0-9]){5}";
+
+        if(word.matches(postalCodeRegex)){
+
+            this.nextCity = true;
+            return true;
+        }
+
+
+        return false;
+    }
+
+    public boolean checkForMail(String word){
+
+        String mailRegex = "([A-Za-z0-9+\\-.,!@#$%^&*()\\\\/|<>\"'_])+\\@([a-z])+(\\.([a-z])+\\.([a-z])+|\\.([a-z])+)";
+
+        if(word.matches(mailRegex)){
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public boolean checkForPhoneNumber(String word){
+
+        String phoneNumberRegex = "([0-9]){4,}\\s*\\/\\s*([0-9])+";
+
+        if(word.matches(phoneNumberRegex)){
+            return true;
+        }
+
+        return false;
+    }
 
     public String addPostags(String stringForTagging){
         MaxentTagger tagger = new MaxentTagger("/Users/fabiankaupmann/DEV/intellijProjects/pdfparsertests/taggers/german-fast.tagger");
 
         String result = tagger.tagString(stringForTagging);
-
-        System.out.println(result);
-
-        return result;
-    }
-
-    public ArrayList<String> analyzePostaggedString(String postaggedString){
-        ArrayList<String> result = new ArrayList();
-        ArrayList<String> postags = new ArrayList();
-        ArrayList<String> words = new ArrayList<String>();
-        Scanner scanner = new Scanner(postaggedString);
-        scanner.useDelimiter("\\s+|_+");
-
-        while(scanner.hasNext()){
-            words.add(scanner.next());
-            if(scanner.hasNext()) {
-                postags.add(scanner.next());
-            }
-        }
-
-        int i = 0;
-
-        for(String word : words){
-            if(postags.get(i).equals("NE")){
-                result.add(word);
-            }
-            ++i;
-        }
 
         return result;
     }

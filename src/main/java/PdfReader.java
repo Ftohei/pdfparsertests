@@ -65,6 +65,10 @@ public class PdfReader {
 
             parsedText = pdfTextStripper.getText(pdDocument);
 
+            cosDocument.close();
+
+            pdDocument.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,45 +85,7 @@ public class PdfReader {
         return parsedText;
     }
 
-//    public String pdfToString(String source){
-//        //TODO: exceptionhandling
-//
-//        String parsedText = null;
-//        PDDocument pdDocument;
-//        COSDocument cosDocument;
-//        File file = new File(source);
-//
-//        if(!file.isFile() || !file.getName().endsWith(".pdf")){
-//            System.err.println("Keine PDF-Datei!");
-//            return null;
-//        }
-//
-//        try {
-//            FileInputStream fileInputStream = new FileInputStream(file);
-//            pdfParser = new PDFParser(fileInputStream);
-//            fileInputStream.close();
-//        } catch (IOException e) {
-//            logger.log(Level.WARNING, "PDF-Parser konnte nicht " +
-//                    "geöffnet werden.");
-//        }
-//
-//
-//        try {
-//            pdfParser.parse();
-//
-//            cosDocument = pdfParser.getDocument();
-//
-//            pdDocument = new PDDocument(cosDocument);
-//
-//            pdfTextStripper = new PDFTextStripper();
-//
-//            parsedText = pdfTextStripper.getText(pdDocument);
-//
-//        } catch (IOException e) {
-//            logger.log(Level.WARNING, "PDF konnte nicht geparst werden.");
-//        }
-//        return parsedText;
-//    }
+
 
 
 //    public ArrayList<Image> pdfToImages(String source){
