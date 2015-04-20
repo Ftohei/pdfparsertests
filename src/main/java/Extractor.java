@@ -148,36 +148,4 @@ public class Extractor {
         return result;
     }
 
-//
-//        System.out.println("---------------");
-//        System.out.println("Postleitzahl + Stadt:");
-//
-
-//
-//        System.out.println("---------------");
-//        System.out.println("Geburtstage: (Daten der Form TT.MM.JJJJ):");
-//
-//        Pattern datePattern = Pattern.compile("([0-9]){2}\\.([0-9]){2}\\.([0-9]){4}|([0-9]){2}\\.\\s*([A-Z])([a-z])+\\s*([0-9]){4}");
-//
-//        Matcher dateMatcher = datePattern.matcher(lebenslauefe);
-//
-//        while(dateMatcher.find()){
-//            String date = dateMatcher.group();
-//            System.out.println(date);
-//        }
-//
-//        System.out.println("---------------");
-//        System.out.println("Straße und Hausnummer");
-//
-//        Pattern addressPattern = Pattern.compile("([A-Z])([a-z]|ä|ö|ü)+\\s([0-9])+|([A-Z])([a-z]|ä|ö|ü)+\\s([A-Z])([a-z]|ä|ö|ü)+\\.\\s([0-9])+");
-//
-//        Matcher addressMatcher = addressPattern.matcher(lebenslauefe);
-//
-//        while(addressMatcher.find()){
-//            String address = addressMatcher.group();
-//            System.out.println(address);
-
-
-
-
 }
